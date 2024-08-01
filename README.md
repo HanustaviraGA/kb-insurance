@@ -33,3 +33,7 @@ Langkah - Langkah Instalasi dan Penggunaan
         - Password : password456
 -  Ketika Anda sudah berhasil login, klik menu "Pertanggungan" untuk melihat, mengubah dan menambahkan data
 -  Pada menu "Pertanggungan", data yang telah dibuat juga dapat dilakukan pencetakan dengan melakukan klik pada tombol print di sebelah data yang tersedia.
+
+## Github Link
+
+- https://github.com/HanustaviraGA/kb-insurance.git
