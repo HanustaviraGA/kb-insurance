@@ -6,13 +6,28 @@ use CodeIgniter\Model;
 
 class Premi extends Model
 {
-    protected $table            = 'premis';
+    protected $table            = 'premi';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = [
+        'nama_nasabah',
+        'periode_awal_pertanggungan',
+        'periode_akhir_pertanggungan',
+        'pertanggungan_kendaraan',
+        'harga_pertanggungan',
+        'jenis_pertanggungan',
+        'premi_kendaraan',
+        'total_premi',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by'
+    ];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

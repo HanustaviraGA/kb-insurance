@@ -20,6 +20,11 @@ class CreatePremiTable extends Migration
                 'constraint' => '255',
                 'null' => false,
             ],
+            'pertanggungan_kendaraan' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '255',
+                'null' => false,
+            ],
             'periode_awal_pertanggungan' => [
                 'type' => 'DATE',
                 'null' => false,
@@ -28,12 +33,20 @@ class CreatePremiTable extends Migration
                 'type' => 'DATE',
                 'null' => false,
             ],
+            'harga_pertanggungan' => [
+                'type' => 'DOUBLE',
+                'null' => false,
+            ],
             'jenis_pertanggungan' => [
                 'type'           => 'INT',
                 'constraint'     => 5,
                 'unsigned'       => true,
             ],
             'premi_kendaraan' => [
+                'type' => 'DOUBLE',
+                'null' => false,
+            ],
+            'total_premi' => [
                 'type' => 'DOUBLE',
                 'null' => false,
             ],

@@ -43,9 +43,11 @@
                     if(page === 'home'){
                         $('#lnk-dashboard').addClass('active');
                         pagename = $('#lnk-dashboard').data('page');
+                        $('#ttld').text('KB Insurance - Dashboard');
                     }else{
                         $('#lnk-'+page).addClass('active');
                         pagename = $('#lnk-'+page).data('page');
+                        $('#ttld').text('KB Insurance - '+pagename);
                     }
                     // console.log(pagename);
                     $('#ttl-header').text(pagename);
@@ -165,6 +167,25 @@
 
     var SUPER = function(){
         return {
+            ntr(number) {
+                // Convert the number to a string and split by the decimal point
+                let number_string = number.toString().replace(/[^,\d]/g, ''),
+                    split = number_string.split(','),
+                    remainder = split[0].length % 3,
+                    rupiah = split[0].substr(0, remainder),
+                    thousand = split[0].substr(remainder).match(/\d{3}/gi);
+
+                // Add dots as thousand separators
+                if (thousand) {
+                    separator = remainder ? '.' : '';
+                    rupiah += separator + thousand.join('.');
+                }
+
+                // Join the rupiah with the decimal part if it exists
+                rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+                return 'Rp' + rupiah;
+            },
+            
             confirm: function (config) {
 
                 config = $.extend(true, {

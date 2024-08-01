@@ -30,6 +30,7 @@
                                 <th>Nama Nasabah </th>
                                 <th>Harga Pertanggungan </th>
                                 <th>Jenis Pertanggungan </th>
+                                <th>Nama Agent </th>
                                 <th>Aksi </th>
                             </tr>
                         </thead>

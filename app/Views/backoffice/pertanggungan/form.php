@@ -73,7 +73,7 @@
                             <div class=" ms-3">
                                 <label for="" class="required form-label">Resiko Pertanggungan</label>
                                 <div class="fv-row form-check form-switch py-4">
-                                    <input class="form-check-input" name="banjir" type="checkbox" value="1" checked id="flexSwitchDefault" />
+                                    <input class="form-check-input" name="banjir" type="checkbox" checked id="flexSwitchDefault" />
                                     <label class="form-check-label" for="flexSwitchDefault">
                                         Banjir
                                     </label>
@@ -84,7 +84,7 @@
                         <div class=" d-md-flex">
                             <div class=" ms-3">
                                 <div class="fv-row form-check form-switch py-4">
-                                    <input class="form-check-input" name="gempa" type="checkbox" value="0" id="flexSwitchDefault2" />
+                                    <input class="form-check-input" name="gempa" type="checkbox" id="flexSwitchDefault2" />
                                     <label class="form-check-label" for="flexSwitchDefault">
                                         Gempa
                                     </label>

@@ -17,8 +17,11 @@ class User extends Model
         'email',
         'password',
         'created_at',
+        'created_by',
         'updated_at',
-        'deleted_at'
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
     ];
 
     protected bool $allowEmptyInserts = false;

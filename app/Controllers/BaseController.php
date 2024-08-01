@@ -25,6 +25,7 @@ abstract class BaseController extends Controller
 
     public function __construct(){
         helper('super');
+        set_time_limit(300);
         $this->session = session();
         $this->db = \Config\Database::connect();
     }

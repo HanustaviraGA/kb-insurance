@@ -21,3 +21,4 @@ $routes->post('/pertanggungan/init_table', 'PertanggunganController::init_table'
 $routes->post('/pertanggungan/create', 'PertanggunganController::create');
 $routes->put('/pertanggungan/update', 'PertanggunganController::update');
 $routes->delete('/pertanggungan/delete', 'PertanggunganController::delete');
+$routes->get('/pertanggungan/print/(:segment)', 'PertanggunganController::print/$1');

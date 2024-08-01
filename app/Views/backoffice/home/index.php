@@ -1,3 +1,3 @@
-<h1>Hello World</h1>
+<h1>Selamat Datang</h1>
 
-<p>Module: Dashboard !!</p>
+<p>Silakan melakukan pencatatan premi</p>

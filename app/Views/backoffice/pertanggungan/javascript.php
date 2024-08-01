@@ -52,26 +52,34 @@
                 },
                 { 
                     data: '2', 
-                    name: 'name',
+                    name: 'nama_nasabah',
                     orderable: true,
                     render: function (data, type, row) {
-                        return SUPER.trim_string(row[2], 30); // The 'name' column
+                        return SUPER.trim_string(row[2], 30);
                     }
                 },
                 { 
                     data: '3', 
-                    name: 'email',
+                    name: 'harga_pertanggungan',
                     orderable: true,
                     render: function (data, type, row) {
-                        return row[3]; // The 'email' column
+                        return SUPER.ntr(row[3]);
                     }
                 },
                 { 
                     data: '4', 
-                    name: 'created_at',
+                    name: 'nama_jenis_pertanggungan',
                     orderable: true,
                     render: function (data, type, row) {
-                        return SUPER.formatDate(row[4]);
+                        return row[4];
+                    }
+                },
+                { 
+                    data: '5', 
+                    name: 'name',
+                    orderable: true,
+                    render: function (data, type, row) {
+                        return SUPER.trim_string(row[5], 30);
                     }
                 },
                 { 
@@ -80,11 +88,15 @@
                     render: function (data, type, row) {
                         var btn_aksi = '';
 
-                        btn_aksi += `<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md mr-2" title="Edit" onclick="onEdit(this)" data-id="` + row[1] + `">
+                        btn_aksi += `<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md mr-2" title="Print" onclick="onPrint(this)" data-id="` + row[1] + `">
+                            <i class="la la-print"></i> Print
+                        </a>`;
+
+                        btn_aksi += `<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md mr-2" style="margin-left: 15px !important" title="Edit" onclick="onEdit(this)" data-id="` + row[1] + `">
                             <i class="la la-edit"></i> Edit
                         </a>`;
 
-                        btn_aksi += `<a href="javascript:;" class="btn ml-3 btn-sm btn-clean btn-icon btn-icon-md kt-font-bold kt-font-danger" onclick="onDestroy(this)" data-id="` + row[1] + `" title="Hapus" >
+                        btn_aksi += `<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md kt-font-bold kt-font-danger" style="margin-left: 15px !important" onclick="onDestroy(this)" data-id="` + row[1] + `" title="Hapus" >
                             <span class="la la-trash"></span> Hapus
                         </a>`;
 
@@ -129,5 +141,46 @@
             onBack: true,
             // reInitTable: true,
         });
+    }
+
+    function onDestroy(element){
+        var id = $(element).data('id');
+        SUPER.confirm({
+			message: "Apa Anda yakin ingin menghapus data ini?",
+			callback: (result) => {
+				if (result) {
+                    $.ajax({
+                        url: '<?= base_url('pertanggungan/delete') ?>',
+                        type: 'DELETE',
+                        data: {
+                            'id': id
+                        },
+                        success: function(response) {
+                            if(response.success) {
+                                SUPER.showMessage({
+                                    success: true,
+                                    message: 'Berhasil melakukan penghapusan data',
+                                    title: 'Berhasil'
+                                });
+                            }else{
+                                SUPER.showMessage();
+                            }
+                            init_table();
+                        },error: function(response) {
+                            SUPER.showMessage({
+                                success: false,
+                                message: response.message,
+                                title: 'Gagal'
+                            });
+                        }
+                    });
+                }
+			}
+		});
+    }
+
+    function onPrint(element){
+        var id = $(element).data('id');
+        window.open('<?= base_url('pertanggungan/print') ?>/' + id, '_blank');
     }
 </script>

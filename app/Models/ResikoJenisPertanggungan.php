@@ -18,8 +18,11 @@ class ResikoJenisPertanggungan extends Model
         'id_jenis_pertanggungan',
         'rate_resiko_jenis_pertanggungan',
         'created_at',
+        'created_by',
         'updated_at',
-        'deletedd_at'
+        'updated_by',
+        'deleted_at',
+        'deleted_by'
     ];
 
     protected bool $allowEmptyInserts = false;

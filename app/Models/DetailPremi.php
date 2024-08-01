@@ -6,13 +6,24 @@ use CodeIgniter\Model;
 
 class DetailPremi extends Model
 {
-    protected $table            = 'detailpremis';
+    protected $table            = 'detail_premi';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = [
+        'id_detail_premi',
+        'id_premi',
+        'id_resiko_jenis_pertanggungan',
+        'nominal_resiko_premi_jenis_pertanggungan',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'deleted_at',
+        'deleted_by'
+    ];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

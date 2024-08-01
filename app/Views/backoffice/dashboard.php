@@ -13,7 +13,7 @@ License: For each use you must have a valid license purchased only from above li
 <html lang="en">
 	<!--begin::Head-->
 	<head><base href="">
-		<title>KB Insurance Indonesia - </title>
+		<title id="ttld">KB Insurance Indonesia - </title>
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
 		<link rel="shortcut icon" href="<?= base_url('assets/media/logos/kb-insurance.png') ?>" />
 		<!--begin::Fonts-->

@@ -27,7 +27,7 @@ class CreateDetailPremiTable extends Migration
                 'unsigned' => true,
                 'constraint' => 5
             ],
-            'nominal_premi_jenis_pertanggungan' => [
+            'nominal_resiko_premi_jenis_pertanggungan' => [
                 'type' => 'DOUBLE',
                 'null' => false,
             ],
