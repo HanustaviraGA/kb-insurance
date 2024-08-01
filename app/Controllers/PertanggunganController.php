@@ -69,7 +69,7 @@ class PertanggunganController extends BaseController
             $insertedID = $q_premi->insertID();
             // Masukkan data detail premi
             $data_detail_premi = [];
-            if($premi['premi_banjir'] > 0){
+            if($premi['id_premi_banjir'] !== 0){
                 $data_detail_premi[] = [
                     'id_premi' => $insertedID,
                     'id_resiko_jenis_pertanggungan' => $premi['id_premi_banjir'],
@@ -78,7 +78,7 @@ class PertanggunganController extends BaseController
                     'created_by' => $this->session->get('id'),
                 ];
             }
-            if($premi['premi_gempa'] > 0){
+            if($premi['id_premi_gempa'] !== 0){
                 $data_detail_premi[] = [
                     'id_premi' => $insertedID,
                     'id_resiko_jenis_pertanggungan' => $premi['id_premi_gempa'],
@@ -100,11 +100,106 @@ class PertanggunganController extends BaseController
     }
 
     public function read(){
-
+        $postData = $this->request->getRawInput();
+        $id_premi = $postData['id'];
+        // Data premi
+        $premi = new Premi();
+        $premi->select('*');
+        $premi->where('premi.deleted_at', NULL);
+        $premi->where('premi.id_premi', $id_premi);
+        $data = $premi->first();
+        // Detail premi
+        $detail_premi = new DetailPremi();
+        $detail_premi->join('resiko_jenis_pertanggungan rjp', 'rjp.id_resiko_jenis_pertanggungan = detail_premi.id_resiko_jenis_pertanggungan');
+        $detail_premi->select('*');
+        $detail_premi->where('detail_premi.deleted_at', NULL);
+        $detail_premi->where('detail_premi.id_premi', $id_premi);
+        $data['detail_premi'] = $detail_premi->findAll();
+        if($data){
+            return $this->response->setStatusCode(200)->setJSON(['success' => true, 'result' => $data]);
+        }else{
+            return $this->response->setStatusCode(404)->setJSON(['success' => false, 'message' => 'Data not found']);
+        }
     }
 
     public function update(){
-        
+        $postData = $this->request->getRawInput();
+        $id_premi = $postData['id_premi'];
+        // Cek interval tahun
+        $interval = $this->check_interval($postData['periode_pertanggungan']);
+        // Cek nominal premi
+        $banjir = false;
+        $gempa = false;
+        if(isset($postData['banjir']) && $postData['banjir'] == 'on'){
+            $banjir = true;
+        }
+        if(isset($postData['gempa']) && $postData['gempa'] == 'on'){
+            $gempa = true;
+        }
+        $premi = $this->count_premi([
+            'harga_pertanggungan' => (float)$postData['harga_pertanggungan'],
+            'tahun' => $interval['tahun'],
+            'jenis_pertanggungan' => $postData['jenis_pertanggungan'],
+            'banjir' => $banjir,
+            'gempa' => $gempa
+        ]);
+
+        // Jadikan satu data
+        $data_premi = [
+            'nama_nasabah' => $postData['nama_nasabah'],
+            'pertanggungan_kendaraan' => $postData['pertanggungan_kendaraan'],
+            'periode_awal_pertanggungan' => $interval['periode_awal_pertanggungan'],
+            'periode_akhir_pertanggungan' => $interval['periode_akhir_pertanggungan'],
+            'harga_pertanggungan' => (float)$postData['harga_pertanggungan'],
+            'jenis_pertanggungan' => (int)$postData['jenis_pertanggungan'],
+            'premi_kendaraan' => $premi['premi_kendaraan'],
+            'total_premi' => (float)$premi['total_premi'],
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => $this->session->get('id'),
+        ];
+
+        try{
+            $this->db->transStart();
+            // Masukkan data premi
+            $q_premi = new Premi();
+            $q_premi->set($data_premi)->where('id_premi', $id_premi)->update();
+            $insertedID = $id_premi;
+            // Masukkan data detail premi
+            $del_detail_premi = new DetailPremi();
+            $del_detail_premi->where('id_premi', $insertedID)->delete();
+            $data_detail_premi = [];
+            if($premi['id_premi_banjir'] !== 0){
+                $data_detail_premi[] = [
+                    'id_premi' => $insertedID,
+                    'id_resiko_jenis_pertanggungan' => $premi['id_premi_banjir'],
+                    'nominal_resiko_premi_jenis_pertanggungan' => $premi['premi_banjir'],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => $this->session->get('id'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => $this->session->get('id'),
+                ];
+            }
+            if($premi['id_premi_gempa'] !== 0){
+                $data_detail_premi[] = [
+                    'id_premi' => $insertedID,
+                    'id_resiko_jenis_pertanggungan' => $premi['id_premi_gempa'],
+                    'nominal_resiko_premi_jenis_pertanggungan' => $premi['premi_gempa'],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => $this->session->get('id'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => $this->session->get('id'),
+                ];
+            }
+            $q_detail_premi = new DetailPremi();
+            $q_detail_premi->insertBatch($data_detail_premi);
+            $this->db->transComplete();
+            if ($this->db->transStatus() === FALSE) {
+                throw new \Exception('Transaction failed');
+            }
+            return $this->response->setStatusCode(200)->setJSON(['success' => true]);
+        }catch(\Exception $e){
+            return $this->response->setStatusCode(500)->setJSON(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
     public function delete(){

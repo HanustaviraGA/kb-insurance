@@ -110,6 +110,8 @@
     function onAdd(){
         blockPage();
         $('#formPertanggungan')[0].reset();
+        $('#reset_button').show();
+        $('#jdl_form_pertanggungan').text('Form Tambah Pertanggungan');
         SUPER.switchForm({
 			tohide: 'table_data',
 			toshow: 'form_data'
@@ -120,6 +122,8 @@
     function onBack(){
         blockPage();
         $('#formPertanggungan')[0].reset();
+        $('#reset_button').show();
+        $('#jdl_form_pertanggungan').text('Form Tambah Pertanggungan');
         SUPER.switchForm({
 			tohide: 'form_data',
 			toshow: 'table_data'
@@ -128,11 +132,46 @@
         unblockPage();
     }
 
+    function onEdit(element){
+        var id = $(element).data('id');
+        blockPage();
+        $('#formPertanggungan')[0].reset();
+        $('#jdl_form_pertanggungan').text('Form Edit Pertanggungan');
+        $('#reset_button').hide();
+        SUPER.switchForm({
+            tohide: 'table_data',
+            toshow: 'form_data'
+        });
+        $.post('<?= base_url('pertanggungan/read') ?>', {id: id}, function(data){
+            $('#id_premi').val(data.result.id_premi).trigger('change');
+            $('#nama_nasabah').val(data.result.nama_nasabah).trigger('change');
+            $('#periode_pertanggungan').val(formatDateToMDY(data.result.periode_awal_pertanggungan) + ' - ' + formatDateToMDY(data.result.periode_akhir_pertanggungan)).trigger('change');
+            $('#pertanggungan_kendaraan').val(data.result.pertanggungan_kendaraan).trigger('change');
+            $('#harga_pertanggungan').val(data.result.harga_pertanggungan).trigger('change');
+            $('#jenis_pertanggungan').val(data.result.jenis_pertanggungan).trigger('change');
+            $.each(data.result.detail_premi, function(key, value){
+                var rsk = value.nama_resiko_jenis_pertanggungan.toLowerCase();
+                $('input[name="'+rsk+'"]').prop('checked', true);
+                $('#'+rsk+'_switch').prop('checked', true);
+            });
+        });
+        $('#nama_nasabah').attr('readonly', true);
+        unblockPage();
+    }
+
     function onReset(){
         $('#formPertanggungan')[0].reset();
     }
 
     function onSave(form){
+        if (!$('input[type="checkbox"]:checked').length) {
+            SUPER.showMessage({
+                success: false,
+                message: 'Pilih salah satu resiko pertanggungan',
+                title: 'Gagal'
+            });
+            return;
+        }
         SUPER.saveForm({
             element: form,
             checker: 'id_premi',
@@ -182,5 +221,17 @@
     function onPrint(element){
         var id = $(element).data('id');
         window.open('<?= base_url('pertanggungan/print') ?>/' + id, '_blank');
+    }
+
+    function formatDateToMDY(dateString) {
+        var dateParts = dateString.split('-');
+        if (dateParts.length === 3) {
+            var year = dateParts[0];
+            var month = dateParts[1];
+            var day = dateParts[2];
+            return month + '/' + day + '/' + year;
+        } else {
+            return 'Invalid date format';
+        }
     }
 </script>

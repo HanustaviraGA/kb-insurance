@@ -19,6 +19,7 @@ $routes->post('/loadpage', 'DashboardController::load_page');
 // Pertanggungan Routes
 $routes->post('/pertanggungan/init_table', 'PertanggunganController::init_table');
 $routes->post('/pertanggungan/create', 'PertanggunganController::create');
+$routes->post('/pertanggungan/read', 'PertanggunganController::read');
 $routes->put('/pertanggungan/update', 'PertanggunganController::update');
 $routes->delete('/pertanggungan/delete', 'PertanggunganController::delete');
 $routes->get('/pertanggungan/print/(:segment)', 'PertanggunganController::print/$1');
